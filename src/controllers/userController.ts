@@ -63,28 +63,28 @@ const users = async (req: usersRequest, res: express.Response, next: express.Nex
     }
 }
 
-const removeUser = async (req: removeUserRequest, res: express.Response, next: express.NextFunction) => {
-    try {
-        const id = req.params.id
-
-
-        const user = await User.findOneAndRemove({_id: id})
-
-        if (!user) {
-            res.status(400).json({message: "user doesn't remove"})
-        }
-
-        res.json({
-            message: "Successful"
-        })
-    } catch (e) {
-        console.log(e)
-        next(e)
-    }
-}
+// const removeUser = async (req: removeUserRequest, res: express.Response, next: express.NextFunction) => {
+//     try {
+//         const id = req.params.id
+//
+//
+//         const user = await User.findOneAndRemove({_id: id})
+//
+//         if (!user) {
+//             res.status(400).json({message: "user doesn't remove"})
+//         }
+//
+//         res.json({
+//             message: "Successful"
+//         })
+//     } catch (e) {
+//         console.log(e)
+//         next(e)
+//     }
+// }
 
 export {
     logIn,
     users,
-    removeUser
+    // removeUser
 }
