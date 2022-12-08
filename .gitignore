@@ -1,0 +1,11 @@
+# Project exclude paths
+/node_modules/
+/src/assect/func.js
+/src/controllers/messageController.js
+/src/controllers/userController.js
+/src/models/messageModel.js
+/src/models/userModel.js
+/src/routes/messageRouter.js
+/src/routes/userRoute.js
+/src/index.js
+.env
