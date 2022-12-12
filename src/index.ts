@@ -6,7 +6,6 @@ import * as dotenv from "dotenv"
 import mongoose from "mongoose"
 import routerUser from "./routes/userRoute"
 import routerMessage from "./routes/messageRouter"
-import {Time} from "./assect/func";
 
 dotenv.config()
 const port = process.env.PORT || 5050
@@ -25,7 +24,7 @@ app.use('/api/auth', routerUser)
 app.use('/api/message', routerMessage)
 
 
-if(process.env.DB_URL) {
+if (process.env.DB_URL) {
     mongoose.connect(process.env.DB_URL)
         .then(() => {
             console.log("Connect with DB")
@@ -60,15 +59,10 @@ io.on("connection", (socket) => {
 
 
     socket.on("add-message", (data) => {
-        const currentOnlineUser = onlineUsers.get(data.to)
+        const currentOnlineUser = onlineUsers.get(data.message.usersChat[1])
         console.log(currentOnlineUser)
         if (currentOnlineUser) {
-            socket.to(currentOnlineUser).emit("msg-recieve", {
-                message: data.msg,
-                topic: data.topic,
-                time: Time(),
-                usersChat: [data.from, data.to],
-            })
+            socket.to(currentOnlineUser).emit("msg-recieve", data.message)
         }
 
     })

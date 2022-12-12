@@ -4,6 +4,6 @@ import {addMessage, getMessages} from "../controllers/messageController";
 const router = Router()
 
 router.post("/addMes", addMessage)
-router.post("/messages", getMessages)
+router.get("/messages/:from/:to", getMessages)
 
 export default router

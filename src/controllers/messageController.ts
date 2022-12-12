@@ -5,11 +5,12 @@ import express from "express"
 interface addMessageRequest extends express.Request {
     body: { from: any; to: any; message: any; topic: any; }
 }
+
 interface getMessagesRequest extends express.Request {
     body: { to: any; from: any; }
 }
 
-const addMessage = async (req: addMessageRequest, res:  express.Response, next: express.NextFunction) => {
+const addMessage = async (req: addMessageRequest, res: express.Response, next: express.NextFunction) => {
     try {
         const {from, to, message, topic} = req.body
 
@@ -30,10 +31,21 @@ const addMessage = async (req: addMessageRequest, res:  express.Response, next: 
 
         await newMessage.save()
 
-        res.json({
-            message: "Successful"
-        })
-
+        if (newMessage.sender &&
+            newMessage.message &&
+            newMessage.message) {
+            res.json({
+                newMessage: {
+                    id: newMessage._id,
+                    fromSelf: newMessage.sender.toString() === from,
+                    message: newMessage.message.text,
+                    topic: newMessage.message.topic,
+                    time: newMessage.timeSend,
+                    usersChat: newMessage.users,
+                    isText: newMessage.isText
+                }
+            })
+        }
 
     } catch (e) {
         console.log(e)
@@ -43,7 +55,7 @@ const addMessage = async (req: addMessageRequest, res:  express.Response, next: 
 
 const getMessages = async (req: getMessagesRequest, res: express.Response, next: express.NextFunction) => {
     try {
-        const {to, from} = req.body
+        const {to, from} = req.params
 
 
         const messages = await Message.find({
@@ -57,16 +69,17 @@ const getMessages = async (req: getMessagesRequest, res: express.Response, next:
             const updateMessage = users.map(m => {
                 if (m.sender && m.message && m.message && m.users) {
                     return {
+                        id: m._id,
                         fromSelf: m.sender.toString() === from,
                         message: m.message.text,
                         topic: m.message.topic,
                         time: m.timeSend,
                         usersChat: m.users,
+                        isText: m.isText
                     }
-                } else {
-                    return []
                 }
             })
+
 
             res.json({
                 item: updateMessage
@@ -78,7 +91,7 @@ const getMessages = async (req: getMessagesRequest, res: express.Response, next:
     }
 }
 
+
 export {
     addMessage, getMessages
-
 }
